@@ -1,0 +1,26 @@
+{
+  "name": "events-seeker",
+  "version": "1.0.0",
+  "description": "helps you to keep your eyes on events that matter",
+  "main": "server/main.js",
+  "dependencies": {
+    "eslint": "^6.3.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server/main.js",
+    "start": "node server/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2kindsofcs/events-seeker.git"
+  },
+  "author": "2kindsofcs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2kindsofcs/events-seeker/issues"
+  },
+  "homepage": "https://github.com/2kindsofcs/events-seeker#readme"
+}
