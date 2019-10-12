@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>키워드를 등록해보자.</h1>
+
+<p>아래에 키워드를 쓰렴.</p>
+<input type="text" id="keywords">
+<input type="submit" id="submit" value="확인">
+</body>
+
+<script>
+const submit = documnet.getElementById("submit");
+submit.addEventListener("click", postKeywords);
+function postKeywords() {
+    let keywords = document.getElementById("keywords")
+    const data = keywords.value;
+    fetch('/addKeywords', {
+        method: 'POST', 
+        body: JSON.stringify(data), 
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+}
+
+</script>
+</html>
