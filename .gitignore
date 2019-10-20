@@ -118,4 +118,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# eslint
+.eslintrc.json
+
 # End of https://www.gitignore.io/api/node,windows
