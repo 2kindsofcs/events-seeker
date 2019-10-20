@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-
+<head>
+  <script defer src="./static/script.js"></script>
+</head>
 <body>
 
 <h1>키워드를 등록해보자.</h1>
@@ -9,46 +11,7 @@
 <input type="text" id="keywords">
 <input type="submit" id="submit" value="확인">
 <button id="button">테스트</button>
+<h3 id="eventList">이벤트 목록</h3>
 </body>
 
-<script>
-const submit = document.getElementById("submit");
-submit.addEventListener("click", postKeywords);
-function postKeywords() {
-    const data = {keywords: document.getElementById("keywords").value};
-    console.log(data)
-    fetch('/addKeywords', {
-        method: 'POST', 
-        body: JSON.stringify(data), 
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-
-}
-let events = document.createElement("p");
-events.id = "eventData"
-submit.appendChild(events);
-const button = document.getElementById('button');
-button.addEventListener('click', getEventsData);
-
-function getEventsData() {
-    let events = document.getElementById('eventData');
-    fetch('/getEventsData')
-    .then(res => res.json())
-    .then(eventList => {
-        const eventPara = document.getElementById('eventData');
-        for (event in eventList) {
-            console.log(event);
-            const element = document.createElement('p');
-            element.innerText = event
-            eventPara.appendChild(element);
-        }
-    })
-    // fetch('/getEventsData', function (req, res) {
-    //     return res.json();
-    // }).then(res => console.log(res)); 왜 이건 안 되지? 
-}
-
-</script>
 </html>
