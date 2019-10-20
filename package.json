@@ -6,12 +6,15 @@
   "dependencies": {
     "eslint": "^6.3.0",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "nodemon": "^1.19.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-config-google": "^0.14.0"
+  },
   "scripts": {
-    "test": "node server/main.js",
-    "start": "node server/main.js"
+    "test": "node main.js",
+    "start": "nodemon main.js"
   },
   "repository": {
     "type": "git",
