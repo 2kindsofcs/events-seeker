@@ -7,7 +7,7 @@ const line = require('@line/bot-sdk');
 
 const app = express();
 const parser = express.json();
-app.use(function(req, res, next) {
+app.use(function(req, res, next) { // express.josn()을 그냥 쓰면 line bot sdk랑 충돌 발생
   if (req.url.indexOf('/webhook') === 0) {
     return next();
   } else {
@@ -29,8 +29,9 @@ app.post('/addKeywords', function(req, res) {
   res.end();
 });
 
+
+const result = [];
 app.get('/getEventsData', function(req, res) {
-  const result = [];
   fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
       .then((response) => response.json())
       .then((response) => {
@@ -61,13 +62,16 @@ app.post('/webhook', line.middleware(config.get('botConfig')), (req, res) => {
       .then((result) => res.json(result));
 });
 
+const userInfo = {userId: ''};
 function handleEvent(event) {
-  if (event.type !== 'follow' ) {
-    console.log(event);
+  if (event.type === 'follow') {
+    userInfo.userId = event.source.userId;
   }
-  return client.replyMessage(event.replyToken, {
-    type: 'text',
-    text: event.message.text,
+  result.forEach((eventInfo) => {
+    return client.pushMessage(userInfo.userId, {
+      type: 'text',
+      text: eventInfo,
+    }).catch((err) => console.log(err));
   });
 }
 
