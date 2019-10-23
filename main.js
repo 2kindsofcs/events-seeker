@@ -39,17 +39,13 @@ app.post('/addKeywords', function(req, res) {
   res.end();
 });
 
-app.get('/loginWithLine', function(req, res, next) {
+app.get('/loginWithLine', function(req, res) {
   const clientId = config.get('channelId');
   const redirectUri = config.get('redirectUri');
   const state = '12345abcde'; // TODO: 랜덤으로 만들어줘야 됨. 일단 테스트용 임시값 사용.
   req.session.state = state;
-  req.session.save(function() {
     res.redirect(`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=openid%20profile`);
   });
-  next();
-  res.end();
-});
 
 app.get('/callback', function(req, res) {
   if (req.session.state == req.query.state) {
