@@ -78,17 +78,13 @@ app.get('/getEventsData', function(req, res) {
   fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
       .then((response) => response.json())
       .then((response) => {
-        const eventIdList = [];
         const eventList = response.rows;
         eventList.forEach((event) => {
           keywordList.forEach((keyword) => {
             if (event.name.includes(keyword)) {
-              eventIdList.push(event.eventId);
+              result.push(`https://festa.io/events/${event.eventId}`);
             }
           });
-        });
-        eventIdList.forEach((element) => {
-          result.push((`https://festa.io/events/${element}`));
         });
       })
       .then(() => {
