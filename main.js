@@ -2,9 +2,16 @@
 const fetch = require('node-fetch');
 const config = require('config'); // cmd에서는 set NODE_ENV=something
 
+const Sequelize = require('./models/index').Sequelize;
+const sequelize = require('./models/index').sequelize;
+const Op = Sequelize.Op;
+const {user} = require('./models');
+
 const express = require('express');
 const session = require('express-session');
 const line = require('@line/bot-sdk');
+
+sequelize.sync();
 
 const sessionStore = new session.MemoryStore();
 const sessionHandler = session({
