@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 const submit = document.getElementById('submit');
-submit.addEventListener('click', postKeywords);
-function postKeywords() {
+submit.addEventListener('click', updateKeywords);
+function updateKeywords() {
   const data = {keywords: document.getElementById('keywords').value};
   fetch('/addKeywords', {
     method: 'POST',
@@ -9,6 +9,9 @@ function postKeywords() {
     headers: {
       'Content-Type': 'application/json',
     },
+  })
+      .then(() => {
+        getEventsData();
   });
 }
 const events = document.createElement('p');
