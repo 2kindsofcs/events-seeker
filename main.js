@@ -70,9 +70,21 @@ app.get('/callback', function(req, res) {
         .then((response) => response.json())
         .then((info) => {
           req.session.access_token = info.access_token;
-          req.session.id_token = info.id_token;
+          const decodedData = jwt.decode(info.id_token, {complete: true});
+          req.session.userId = decodedData.payload.sub; // user's line id
+          (async function isOldUser() {
+            const count = await user.count({
+              where: {userId: decodedData.payload.sub},
+            });
+            if (count === 0) {
+              await user.create({userId: decodedData.payload.sub, keywords: null, isPush: null, cycle: null});
+            }
+          })();
         });
     res.redirect('/');
+  } else {
+    res.end('invalid url');
+    throw new Error('how did you get to here?');
   }
 });
 
