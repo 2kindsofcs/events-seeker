@@ -23,6 +23,9 @@ const sessionHandler = session({
 const app = express();
 app.use(sessionHandler);
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
 const parser = express.json();
 app.use(function(req, res, next) { // express.josn()을 그냥 쓰면 line bot sdk랑 충돌 발생
   if (req.url.indexOf('/webhook') === 0) {
@@ -36,7 +39,9 @@ app.use('/client', express.static(__dirname + '/client'));
 
 
 app.get('/', function(req, res) {
-  res.redirect('/client/main.html');
+  res.render('main', {
+    session: req.session,
+});
 });
 
 const keywordList = [];
@@ -80,8 +85,8 @@ app.get('/callback', function(req, res) {
               await user.create({userId: decodedData.payload.sub, keywords: null, isPush: null, cycle: null});
             }
           })();
+          res.redirect('/');
         });
-    res.redirect('/');
   } else {
     res.end('invalid url');
     throw new Error('how did you get to here?');
