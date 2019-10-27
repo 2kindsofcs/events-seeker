@@ -9,6 +9,7 @@ const {user} = require('./models');
 
 const express = require('express');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 const line = require('@line/bot-sdk');
 
 sequelize.sync();
@@ -18,7 +19,7 @@ const sessionHandler = session({
   secret: config.get('secret'),
   store: sessionStore,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
 });
 const app = express();
 app.use(sessionHandler);
@@ -41,14 +42,24 @@ app.use('/client', express.static(__dirname + '/client'));
 app.get('/', function(req, res) {
   res.render('main', {
     session: req.session,
-});
+  });
 });
 
 const keywordList = [];
 
-app.post('/addKeywords', function(req, res) {
+app.post('/addKeywords', async function(req, res) {
   keywordList.push(req.body.keywords);
-  res.end();
+  // 키워드 받으면 키워드만 update. 
+  // UPDATE user SET keywords = CONCAT(keywords, ", ML") WHERE id = 1
+  if (req.session.userId) {
+    await user.update({
+      keywords: sequelize.fn('CONCAT', sequelize.col('keywords'), req.body.keywords),
+    },
+    {
+      where: {userId: req.session.userId},
+    });
+  }
+  res.send("end");
 });
 
 app.get('/loginWithLine', function(req, res) {
@@ -56,8 +67,8 @@ app.get('/loginWithLine', function(req, res) {
   const redirectUri = config.get('redirectUri');
   const state = '12345abcde'; // TODO: 랜덤으로 만들어줘야 됨. 일단 테스트용 임시값 사용.
   req.session.state = state;
-    res.redirect(`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=openid%20profile`);
-  });
+  res.redirect(`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=openid%20profile`);
+});
 
 app.get('/callback', function(req, res) {
   if (req.session.state == req.query.state) {
@@ -77,6 +88,7 @@ app.get('/callback', function(req, res) {
           req.session.access_token = info.access_token;
           const decodedData = jwt.decode(info.id_token, {complete: true});
           req.session.userId = decodedData.payload.sub; // user's line id
+          // 뭔가 이것보다 더 깔끔한 방법이 있을 것 같은데 이게 최선인가? 
           (async function isOldUser() {
             const count = await user.count({
               where: {userId: decodedData.payload.sub},
@@ -94,6 +106,14 @@ app.get('/callback', function(req, res) {
 });
 
 const result = [];
+// 챗봇 --> 하루 세번 이벤트를 받아와서 "쏴줌"
+// 웹사이트 --> 로그인했거나, 새로고침하거나, 키워드 더하면 그에 해당하는 정보를 줌 
+
+// app.get('/getEventDataAll)
+// 세션에 id가 있으면 db에서 해당 유저가 설정해놓은 키워드 추려서 보여줌
+// id는 있는데 설정해놓은 키워드가 없으면 키워드가 없음을 클라쪽에 알려줌
+// id가 없으면 id가 없음을 알려줌 
+
 app.get('/getEventsData', function(req, res) {
   fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
       .then((response) => response.json())
