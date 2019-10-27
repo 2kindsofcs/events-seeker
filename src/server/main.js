@@ -49,15 +49,8 @@ const keywordList = [];
 
 app.post('/addKeywords', async function(req, res) {
   keywordList.push(req.body.keywords);
-  // 키워드 받으면 키워드만 update. 
-  // UPDATE user SET keywords = CONCAT(keywords, ", ML") WHERE id = 1
   if (req.session.userId) {
-    await user.update({
-      keywords: sequelize.fn('CONCAT', sequelize.col('keywords'), req.body.keywords),
-    },
-    {
-      where: {userId: req.session.userId},
-    });
+    // create a new row 
   }
   res.send("end");
 });
@@ -106,8 +99,6 @@ app.get('/callback', function(req, res) {
 });
 
 const result = [];
-// 챗봇 --> 하루 세번 이벤트를 받아와서 "쏴줌"
-// 웹사이트 --> 로그인했거나, 새로고침하거나, 키워드 더하면 그에 해당하는 정보를 줌 
 
 // app.get('/getEventDataAll)
 // 세션에 id가 있으면 db에서 해당 유저가 설정해놓은 키워드 추려서 보여줌
