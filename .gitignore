@@ -126,3 +126,6 @@ $RECYCLE.BIN/
 # config
 config/config.json
 config/production.json
+
+# ts compile
+out
