@@ -12,7 +12,7 @@ function updateKeywords() {
   })
       .then(() => {
         getEventsData();
-  });
+      });
 }
 const events = document.createElement('p');
 events.id = 'eventData';
@@ -31,4 +31,10 @@ function getEventsData() {
           eventHead.appendChild(element);
         });
       });
+}
+const loginB = document.getElementById('login');
+loginB.addEventListener('click', loginWithLine);
+
+function loginWithLine() {
+  fetch('/loginWithLine');
 }
