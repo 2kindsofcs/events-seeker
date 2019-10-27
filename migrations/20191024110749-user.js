@@ -15,11 +15,11 @@ module.exports = {
       },
       isPush: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
       },
       cycle: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     });
     return queryInterface.addIndex('user', ['userId']);
