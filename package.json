@@ -15,25 +15,37 @@
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.4",
     "oauth": "^0.9.15",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "sequelize": "^5.21.1",
-    "sequelize-cli": "^5.5.1"
+    "sequelize-cli": "^5.5.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.28",
     "@types/config": "0.0.35",
     "@types/express": "^4.17.1",
     "@types/express-session": "^1.15.15",
+    "@types/html-webpack-plugin": "^3.2.1",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/node": "^12.11.7",
     "@types/node-fetch": "^2.5.2",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.3",
     "@types/validator": "^10.11.3",
+    "@types/webpack": "^4.39.5",
     "eslint-config-google": "^0.14.0",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   },
   "scripts": {
     "test": "node main.js",
-    "compile": "tsc && cp -R src/server/views out/server/views && node out/server/main.js",
-    "start": "nodemon -e ts --exec \"npm run compile\""
+    "compile": "tsc -p server/tsconfig.json && node out/server/main.js",
+    "start": "nodemon -e ts --exec \"npm run compile\"",
+    "build:client": "webpack --config client/webpack.config.ts"
   },
   "repository": {
     "type": "git",

@@ -24,9 +24,6 @@ const sessionHandler = session({
 const app = express();
 app.use(sessionHandler);
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 const parser = express.json();
 app.use(function(req, res, next) { // express.josn()을 그냥 쓰면 line bot sdk랑 충돌 발생
   if (req.url.indexOf('/webhook') === 0) {
@@ -36,14 +33,6 @@ app.use(function(req, res, next) { // express.josn()을 그냥 쓰면 line bot s
   }
 });
 app.use(express.urlencoded({extended: true}));
-app.use('/client', express.static(path.join(__dirname, '..', 'client')));
-
-
-app.get('/', function(req, res) {
-  res.render('main', {
-    session: req.session,
-  });
-});
 
 const keywordList: string[] = [];
 
@@ -159,6 +148,8 @@ function handleEvent(event: FollowEvent) {
     }).catch((err) => console.log(err));
   });
 }
+
+app.use('/', express.static(path.join(__dirname, '..', 'client')));
 
 app.listen(80, () => console.log('listening on 80'));
 
