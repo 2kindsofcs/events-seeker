@@ -1,20 +1,17 @@
 import { Model, DataTypes } from 'sequelize';
 
-class User extends Model {
+class Keywords extends Model {
   public id!: number;
-  public userId!: string;
-  public isPush!: boolean;
-  public cycle!: string;
+  public keyword!: string;
 }
 
-export default User;
+export default Keywords;
 
 import sequelize from './index';
 
-User.init({
-  userId: DataTypes.STRING,
-  isPush: DataTypes.BOOLEAN,
-  cycle: DataTypes.STRING,
+Keywords.init({
+  id: DataTypes.NUMBER,
+  keyword: DataTypes.STRING,
 }, {
   freezeTableName: true, // Model tableName will be the same as the model name
   timestamps: false, // CreatedAt, UpdatedAt will not be generated
