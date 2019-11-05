@@ -49,11 +49,32 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         })
     }
 
+
+    public signInCheck = ():React.ReactNode => {
+        let signedIn = false;
+        fetch('/isSignedInWithLine')
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.answer === true) {
+                signedIn = true;
+                this.setState({isSignedIn: signedIn});
+            }
+        })
+        return undefined;
+    }
+
+    public greetingHandler = () => {
+        if (this.state.isSignedIn) {
+            return <p>로그인 하셨습니다.</p>
+        } else {
+            return <a href="/loginWithLine">라인으로 로그인하기</a>
+        }
+    }
+
     public render() {
         return <>
-            <h2>로그인을 하셨군요!</h2>
-            <a id="login" href="/loginWithLine">라인으로 로그인하기</a>
-        
+            <div>{this.signInCheck()}
+               {this.greetingHandler()}</div>
             <h1>키워드를 등록해보자.</h1>
             <p>아래에 키워드를 쓰렴.</p>
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />

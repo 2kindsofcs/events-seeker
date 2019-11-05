@@ -34,6 +34,14 @@ app.use(function(req, res, next) { // express.josn()을 그냥 쓰면 line bot s
 });
 app.use(express.urlencoded({extended: true}));
 
+app.get('/isSignedInWithLine', function (req, res) {
+  if (!req.session) {
+    res.json({answer: false});
+  } else if (req.session.userId) {
+    res.json({answer: true});
+  }
+})
+
 const keywordList: string[] = [];
 
 app.post('/addKeywords', async function(req, res) {
