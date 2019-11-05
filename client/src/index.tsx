@@ -43,6 +43,12 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         this.setState({keyword: e.target.value});
     }
 
+    public showEventList = ():React.ReactNode => {
+        return this.state.eventList.map((event: string, index: number) => {
+            return <div key={index}>{event}</div>
+        })
+    }
+
     public render() {
         return <>
             <h2>로그인을 하셨군요!</h2>
@@ -55,13 +61,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
             <button id="button">테스트</button>
             <br/>
             <h3 id="eventList">이벤트 목록</h3>
-            <div>
-            {
-                this.state.eventList.map((event: string, index: number) => {
-                    return <div key={index}>{event}</div>
-                })
-            }
-            </div>
+            <div>{this.showEventList()}</div>
         </>;
     }
 }
