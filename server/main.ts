@@ -4,6 +4,7 @@ import config from 'config'; // cmd에서는 set NODE_ENV=something
 import sequelize from './models';
 import Sequelize from 'sequelize';
 import user from './models/user';
+import keywords from './models/keywords';
 import express from 'express';
 import session from 'express-session';
 import jwt from 'jsonwebtoken';
@@ -50,9 +51,9 @@ app.post('/addKeywords', async function(req, res) {
     return;
   }
 
-  keywordList.push(req.body.keywords); 
+  keywordList.push(req.body.keyword); 
   if (req.session.userId) {
-    // create a new row 
+    await keywords.create({userId: req.session.userId, keyword: req.body.keyword});
   }
   res.send("end");
 });
