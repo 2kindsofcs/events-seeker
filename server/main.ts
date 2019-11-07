@@ -119,17 +119,52 @@ const result: string[] = [];
 // id는 있는데 설정해놓은 키워드가 없으면 키워드가 없음을 클라쪽에 알려줌
 // id가 없으면 id가 없음을 알려줌 
 
-app.get('/getEventsData', function(req, res) {
+app.get('getEventDataAll', async function(req, res) {
+  if (!req.session) {
+    res.end('no session. can\'t get eventdata')
+  } else if (req.session.id) try {
+    const keywordData = await keywords.findAll({
+      attributes: ['keyword'],
+      where: {userId: req.session.id}
+    })
+    const keywordList = keywordData.map((instance) => {
+      return instance.keyword;
+    })
   fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
       .then((response) => response.json())
       .then((response) => {
         const eventList: { name: string, eventId: string }[] = response.rows;
+      let result: string[] = [];
         eventList.forEach((event) => {
           keywordList.forEach((keyword) => {
             if (event.name.includes(keyword)) {
               result.push(`https://festa.io/events/${event.eventId}`);
             }
+        })
+      })
+    })
+    .then(() => {
+      res.json(result);
           });
+  } catch(e) {
+    console.error(e);
+    res.end(e);
+  }
+})
+
+
+app.get('/getEventData', function(req, res) {
+  if (!req.session) {
+    res.end("no session")
+  };
+  fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
+      .then((response) => response.json())
+      .then(async (response) => {
+        const eventList: { name: string, eventId: string }[] = response.rows;
+        eventList.forEach((event) => {
+          if (event.name.includes(req.query.keyword)) {
+            result.push(`https://festa.io/events/${event.eventId}`);
+          }
         });
       })
       .then(() => {
