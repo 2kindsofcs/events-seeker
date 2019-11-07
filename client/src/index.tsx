@@ -1,6 +1,8 @@
 import React from 'react';
 import reactDom from 'react-dom';
 
+// TODO: 로그인하면 isginedin을 true로 바꾸고 eventList를 id를 이용해 찾아온 eventList로 바꿔줌 
+
 class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[], keyword: string }> {
     constructor(props: any) {
         super(props);
@@ -11,16 +13,6 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         };
     }
 
-    public updateEventList = () => {
-        fetch('/getEventsData')
-            .then((res) => res.json())
-            .then((eventList: string[]) => {
-                const newEventList = this.state.eventList.concat(eventList);
-                this.setState({
-                    eventList: newEventList,
-                })
-            });
-    }
 
     public updateEventData = () => {
         const data = {
@@ -34,7 +26,14 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
                 },
               })
               .then(() => {
-                  this.updateEventList();
+                fetch(`/getEventData?keyword=${data.keyword}`)
+                .then((res) => res.json())
+                .then((eventList: string[]) => {
+                    const newEventList = this.state.eventList.concat(eventList);
+                    this.setState({
+                        eventList: newEventList,
+                    })
+                });
               })
 
       }
@@ -49,18 +48,18 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         })
     }
 
-
-    public signInCheck = ():React.ReactNode => {
+    public signInCheck = () => {
         let signedIn = false;
         fetch('/isSignedInWithLine')
         .then((res) => res.json())
-        .then((res) => {
+        .then(async (res) => {
             if (res.answer === true) {
                 signedIn = true;
                 this.setState({isSignedIn: signedIn});
+                const userEventList = await fetch('/getEventDataAll').then((res) => res.json());
+                this.setState({eventList: userEventList});
             }
         })
-        return undefined;
     }
 
     public greetingHandler = () => {
