@@ -119,7 +119,8 @@ const result: string[] = [];
 // id는 있는데 설정해놓은 키워드가 없으면 키워드가 없음을 클라쪽에 알려줌
 // id가 없으면 id가 없음을 알려줌 
 
-app.get('getEventDataAll', async function(req, res) {
+app.get('/getEventDataAll', async function(req, res) {
+  let result: string[] = [];
   if (!req.session) {
     res.end('no session. can\'t get eventdata')
   } else if (req.session.id) try {
@@ -157,6 +158,7 @@ app.get('/getEventData', function(req, res) {
   if (!req.session) {
     res.end("no session")
   };
+  let result: string[] = [];
   fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
       .then((response) => response.json())
       .then(async (response) => {
