@@ -66,6 +66,7 @@ app.get('/loginWithLine', function(req, res) {
   res.redirect(`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=openid%20profile`);
 });
 
+
 app.get('/callback', function(req, res) {
   if (!req.session) {
     res.status(403);
@@ -112,41 +113,36 @@ app.get('/callback', function(req, res) {
   }
 });
 
-const result: string[] = [];
-
-// app.get('/getEventDataAll)
-// 세션에 id가 있으면 db에서 해당 유저가 설정해놓은 키워드 추려서 보여줌
-// id는 있는데 설정해놓은 키워드가 없으면 키워드가 없음을 클라쪽에 알려줌
-// id가 없으면 id가 없음을 알려줌 
-
 app.get('/getEventDataAll', async function(req, res) {
   let result: string[] = [];
   if (!req.session) {
     res.end('no session. can\'t get eventdata')
-  } else if (req.session.id) try {
+  } else if (req.session.userId) try {
     const keywordData = await keywords.findAll({
       attributes: ['keyword'],
-      where: {userId: req.session.id}
+      where: {userId: req.session.userId}
     })
     const keywordList = keywordData.map((instance) => {
       return instance.keyword;
     })
-  fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
-      .then((response) => response.json())
-      .then((response) => {
-        const eventList: { name: string, eventId: string }[] = response.rows;
-      let result: string[] = [];
-        eventList.forEach((event) => {
-          keywordList.forEach((keyword) => {
-            if (event.name.includes(keyword)) {
-              result.push(`https://festa.io/events/${event.eventId}`);
-            }
+    if (!keywordList) {
+      res.json(result);
+    }
+    fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
+    .then((response) => response.json())
+    .then((response) => {
+      const eventList: { name: string, eventId: string }[] = response.rows;
+      eventList.forEach((event) => {
+        keywordList.forEach((keyword) => {
+          if (event.name.includes(keyword)) {
+            result.push(`https://festa.io/events/${event.eventId}`);
+          }
         })
       })
     })
     .then(() => {
       res.json(result);
-          });
+    });
   } catch(e) {
     console.error(e);
     res.end(e);
@@ -187,6 +183,7 @@ function handleEvent(event: FollowEvent) {
   if (event.type === 'follow') {
     userInfo.userId = event.source.userId!;
   }
+  const result = ['data'] // TODO: 알맞은 데이터 전송하기 
   result.forEach((eventInfo) => {
     return client.pushMessage(userInfo.userId, {
       type: 'text',
