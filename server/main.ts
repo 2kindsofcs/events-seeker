@@ -43,16 +43,19 @@ app.get('/isSignedInWithLine', function (req, res) {
   }
 })
 
-const keywordList: string[] = [];
 
 app.post('/addKeywords', async function(req, res) {
   if (!req.session) {
     res.status(403);
     return;
   }
-
-  keywordList.push(req.body.keyword); 
-  if (req.session.userId) {
+  const isOverlapped: number = await keywords.count({
+    where: {
+      userId: req.session.userId,
+      keyword: req.body.keyword,
+    }
+  });
+  if (req.session.userId && !isOverlapped) {
     await keywords.create({userId: req.session.userId, keyword: req.body.keyword});
   }
   res.send("end");
