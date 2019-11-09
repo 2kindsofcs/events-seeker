@@ -1,8 +1,6 @@
 import React from 'react';
 import reactDom from 'react-dom';
 
-// TODO: 로그인하면 isginedin을 true로 바꾸고 eventList를 id를 이용해 찾아온 eventList로 바꿔줌 
-
 class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[], keyword: string }> {
     constructor(props: any) {
         super(props);
@@ -62,6 +60,10 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         })
     }
 
+    componentDidMount() {
+        this.signInCheck();
+      }
+
     public greetingHandler = () => {
         if (this.state.isSignedIn) {
             return <p>로그인 하셨습니다.</p>
@@ -72,8 +74,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
 
     public render() {
         return <>
-            <div>{this.signInCheck()}
-               {this.greetingHandler()}</div>
+            <div>{this.greetingHandler()}</div>
             <h1>키워드를 등록해보자.</h1>
             <p>아래에 키워드를 쓰렴.</p>
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
