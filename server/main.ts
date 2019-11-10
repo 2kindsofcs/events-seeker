@@ -117,7 +117,6 @@ app.get('/callback', function(req, res) {
 });
 
 app.get('/getEventDataAll', async function(req, res) {
-  let result: string[] = [];
   if (!req.session) {
     res.end('no session. can\'t get eventdata')
   } else if (req.session.userId) try {
@@ -129,21 +128,10 @@ app.get('/getEventDataAll', async function(req, res) {
       return instance.keyword;
     })
     if (!keywordList) {
-      res.json(result);
+      res.json([]);
     }
-    fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
-    .then((response) => response.json())
-    .then((response) => {
-      const eventList: { name: string, eventId: string }[] = response.rows;
-      eventList.forEach((event) => {
-        keywordList.forEach((keyword) => {
-          if (event.name.includes(keyword)) {
-            result.push(`https://festa.io/events/${event.eventId}`);
-          }
-        })
-      })
-    })
-    .then(() => {
+    getEventDataFesta(keywordList)
+    .then((result) => {
       res.json(result);
     });
   } catch(e) {
@@ -157,21 +145,26 @@ app.get('/getEventData', function(req, res) {
   if (!req.session) {
     res.end("no session")
   };
-  let result: string[] = [];
-  fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
-      .then((response) => response.json())
-      .then(async (response) => {
-        const eventList: { name: string, eventId: string }[] = response.rows;
-        eventList.forEach((event) => {
-          if (event.name.includes(req.query.keyword)) {
-            result.push(`https://festa.io/events/${event.eventId}`);
-          }
-        });
-      })
-      .then(() => {
-        res.json(result);
-      });
+  getEventDataFesta([req.query.keyword])
+  .then((result) => res.json(result));
 });
+
+function getEventDataFesta(keywordList: string[]) {
+  const eventList: string[] = []; 
+  return fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
+      .then((response) => response.json())
+  .then((response) => {
+    const eventInfo: { name: string, eventId: string }[] = response.rows;
+    for (const event of eventInfo) {
+      for (const keyword of keywordList) {
+        if (event.name.includes(keyword)) {
+          eventList.push(`https://festa.io/events/${event.eventId}`);
+          }
+      }
+    }
+      })
+  .then(() => eventList);
+}
 
 const client = new Client(config.get('botConfig'));
 
@@ -182,7 +175,7 @@ app.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
 });
 
 const userInfo = {userId: ''};
-function handleEvent(event: FollowEvent) {
+async function handleEvent(event: FollowEvent) {
   if (event.type === 'follow') {
     userInfo.userId = event.source.userId!;
   }
