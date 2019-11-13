@@ -11,7 +11,6 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         };
     }
 
-
     public updateEventData = () => {
         const data = {
             keyword: this.state.keyword,
@@ -47,13 +46,11 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
     }
 
     public signInCheck = () => {
-        let signedIn = false;
         fetch('/isSignedInWithLine')
         .then((res) => res.json())
         .then(async (res) => {
             if (res.answer === true) {
-                signedIn = true;
-                this.setState({isSignedIn: signedIn});
+                this.setState({isSignedIn: res.answer});
                 const userEventList = await fetch('/getEventDataAll').then((res) => res.json());
                 this.setState({eventList: userEventList});
             }
@@ -72,6 +69,8 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
         }
     }
 
+    public addBotFriend = () => 'line://ti/p/@193qusdw';
+
     public render() {
         return <>
             <div>{this.greetingHandler()}</div>
@@ -80,6 +79,8 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventList: string[]
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
             <input type="submit" id="submit" value="확인" onClick={this.updateEventData}  />
             <button id="button">테스트</button>
+            <p>봇을 친구로 추가해야 알람을 받을 수 있습니다.</p>
+            <a href={this.addBotFriend()} target="_blank">친구 추가하기</a>
             <br/>
             <h3 id="eventList">이벤트 목록</h3>
             <div>{this.showEventList()}</div>
