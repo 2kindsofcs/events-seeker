@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 
 class EventData extends Model {
   public id!: number;
-  public eventIdList!: string;
+  public eventList!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -12,7 +12,7 @@ export default EventData;
 import sequelize from './index';
 
 EventData.init({
-  eventIdList: DataTypes.STRING,
+  eventList: DataTypes.STRING,
   createdAt: DataTypes.DATE,
   updatedAt: DataTypes.DATE,
 }, {
