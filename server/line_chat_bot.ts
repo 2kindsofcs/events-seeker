@@ -1,13 +1,43 @@
 import config from 'config'; // cmd에서는 set NODE_ENV=something
 import sequelize from './models';
+import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
 import user from './models/user';
-import keywords from './models/keywords'
+import keywords from './models/keywords';
+import eventData from './models/eventData';
 import { Client, middleware as LineMiddleWare, FollowEvent, TextMessage } from '@line/bot-sdk';
+import express from 'express';
+
+const app = express();
 
 sequelize.sync();
 const client = new Client(config.get('botConfig'));
 
+app.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
+  Promise
+      .all(req.body.events.map(handleEvent))
+      .then((result) => res.json(result));
+});
+
+
+async function handleEvent(event: FollowEvent) {
+  if (event.type != 'follow') {
+    return
+  } else {
+    const id: string = event.source.userId!;
+    const keywordData = (await keywords.findAll({
+      attributes: ['keyword'],
+      where: {userId: id}
+    })).map(instance => instance.keyword);
+    if (keywordData.length == 0) {
+      return
+    } else {
+      const eventData = await getEventDataAll();
+      const eventDic = await eventFilter(eventData, keywordData);
+      pushMessage({id: keywordData}, eventDic);
+    }
+  }
+}
 
 
 async function eventDelivery() {
