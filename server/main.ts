@@ -166,27 +166,6 @@ function getEventDataFesta(keywordList: string[]) {
   .then(() => eventList);
 }
 
-const client = new Client(config.get('botConfig'));
-
-app.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
-  Promise
-      .all(req.body.events.map(handleEvent))
-      .then((result) => res.json(result));
-});
-
-const userInfo = {userId: ''};
-async function handleEvent(event: FollowEvent) {
-  if (event.type === 'follow') {
-    userInfo.userId = event.source.userId!;
-  }
-  const result = ['data'] // TODO: 알맞은 데이터 전송하기 
-  result.forEach((eventInfo) => {
-    return client.pushMessage(userInfo.userId, {
-      type: 'text',
-      text: eventInfo,
-    }).catch((err) => console.log(err));
-  });
-}
 
 app.use('/', express.static(path.join(__dirname, '..', 'client')));
 
