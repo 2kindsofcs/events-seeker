@@ -2,7 +2,7 @@ import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
 
-class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[]}, keyword: string }> {
+class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[][]}, keyword: string }> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -47,8 +47,8 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
     }
 
     public showEventList = ():React.ReactNode => {
-        return Object.keys(this.state.eventDic).map((event: string, index: number) => {
-            return <EventBox key={index} eventName={event} eventLinkList={this.state.eventDic[event]} />
+        return Object.keys(this.state.eventDic).map((keyword: string, index: number) => {
+            return <EventBox key={index} keyword={keyword} eventLinkList={this.state.eventDic[keyword]} />
         })
     }
 
@@ -81,10 +81,10 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
     public render() {
         return <>
             <div>{this.greetingHandler()}</div>
-            <h1>이벤트 배달부</h1>
+            <h1>이벤트 배달부 📮</h1>
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
-            <input type="submit" id="submit" value="확인" onClick={this.updateEventData}  />
+            <button id="keywordButton" onClick={this.updateEventData}>추가하기</button>
             <p>봇을 친구로 추가하면 알람을 받을 수 있습니다.</p>
             <a href={this.addBotFriend()} target="_blank">친구 추가하기</a>
             <br/>

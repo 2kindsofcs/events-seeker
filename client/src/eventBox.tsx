@@ -1,15 +1,15 @@
 import React from "react";
 
 export interface eventProps extends React.HTMLAttributes<HTMLDivElement> {
-    eventName: string;
-    eventLinkList: string[];
+    keyword: string;
+    eventLinkList: string[][];
 }
 
 export default class EventBox extends React.Component<eventProps> {
-    public showEventLinks(eventLinkList: string[]) {
+    public showEventLinks(eventLinkList: string[][]) {
         if (eventLinkList.length > 1 ) {
-            return eventLinkList.map((event: string, index: number) => {
-                return <div key={index} className="eventLink">{event}</div>
+            return eventLinkList.map((event: string[], index: number) => {
+                return <div key={index} className="eventLink">{event[0]}<br/>{event[1]}</div>
             })
         } else {
             return <div>앗, 해당 키워드가 들어간 이벤트가 없습니다!</div>
@@ -20,7 +20,7 @@ export default class EventBox extends React.Component<eventProps> {
         return (
             <div className="eventBox">
                 <div className="eventName">
-                    {this.props.eventName}
+                    {this.props.keyword}
                 </div> 
                     {this.showEventLinks(this.props.eventLinkList)}
             </div>

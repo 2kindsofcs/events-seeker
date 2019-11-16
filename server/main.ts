@@ -151,14 +151,14 @@ async function getEventDataFesta(keywordList: string[]) {
     name: string;
     eventId: string;
   }[] = response.rows;
-  const eventDic: {[key: string]: string[]}  = {}; 
+  const eventDic: {[key: string]: string[][]}  = {}; 
   for (const event of eventInfo) {
     for (const keyword of keywordList) {
       if (event.name.includes(keyword)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
         if (!eventDic.hasOwnProperty(keyword)) {
-          eventDic[keyword] = [`https://festa.io/events/${event.eventId}`];
+          eventDic[keyword] = [[event.name, `https://festa.io/events/${event.eventId}`]];
         } else {
-          eventDic[keyword].push(`https://festa.io/events/${event.eventId}`);
+          eventDic[keyword].push([event.name,`https://festa.io/events/${event.eventId}`]);
         }
       }
     }
