@@ -8,11 +8,9 @@ import keywords from './models/keywords';
 import express from 'express';
 import session from 'express-session';
 import jwt from 'jsonwebtoken';
-import { Client, middleware as LineMiddleWare, FollowEvent } from '@line/bot-sdk';
 import path from 'path';
 
 const Op = Sequelize.Op;
-
 sequelize.sync();
 
 const sessionStore = new session.MemoryStore();
@@ -45,8 +43,8 @@ app.get('/isSignedInWithLine', function (req, res) {
 
 
 app.post('/addKeywords', async function(req, res) {
-  if (!req.session) {
-    res.status(403);
+  if (!req.session || !req.session.userId) {
+    res.send('');
     return;
   }
   const isOverlapped: number = await keywords.count({
@@ -142,32 +140,29 @@ app.get('/getEventDataAll', async function(req, res) {
 
 
 app.get('/getEventData', function(req, res) {
-  if (!req.session) {
-    res.end("no session")
-  };
   getEventDataFesta([req.query.keyword])
   .then((result) => res.json(result));
 });
 
 async function getEventDataFesta(keywordList: string[]) {
-  const eventDic: {[key: string]: string[]}  = {}; 
   const rawData = await fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false');
   const response = await rawData.json();
   const eventInfo: {
     name: string;
     eventId: string;
   }[] = response.rows;
-    for (const event of eventInfo) {
-      for (const keyword of keywordList) {
+  const eventDic: {[key: string]: string[]}  = {}; 
+  for (const event of eventInfo) {
+    for (const keyword of keywordList) {
       if (event.name.includes(keyword)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
         if (!eventDic.hasOwnProperty(keyword)) {
           eventDic[keyword] = [`https://festa.io/events/${event.eventId}`];
         } else {
           eventDic[keyword].push(`https://festa.io/events/${event.eventId}`);
         }
-          }
       }
     }
+  }
   return eventDic;
 }
 
