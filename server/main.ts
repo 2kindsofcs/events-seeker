@@ -149,21 +149,26 @@ app.get('/getEventData', function(req, res) {
   .then((result) => res.json(result));
 });
 
-function getEventDataFesta(keywordList: string[]) {
-  const eventList: string[] = []; 
-  return fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false')
-      .then((response) => response.json())
-  .then((response) => {
-    const eventInfo: { name: string, eventId: string }[] = response.rows;
+async function getEventDataFesta(keywordList: string[]) {
+  const eventDic: {[key: string]: string[]}  = {}; 
+  const rawData = await fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false');
+  const response = await rawData.json();
+  const eventInfo: {
+    name: string;
+    eventId: string;
+  }[] = response.rows;
     for (const event of eventInfo) {
       for (const keyword of keywordList) {
-        if (event.name.includes(keyword)) {
-          eventList.push(`https://festa.io/events/${event.eventId}`);
+      if (event.name.includes(keyword)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
+        if (!eventDic.hasOwnProperty(keyword)) {
+          eventDic[keyword] = [`https://festa.io/events/${event.eventId}`];
+        } else {
+          eventDic[keyword].push(`https://festa.io/events/${event.eventId}`);
+        }
           }
       }
     }
-      })
-  .then(() => eventList);
+  return eventDic;
 }
 
 
