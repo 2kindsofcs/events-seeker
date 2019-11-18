@@ -74,6 +74,29 @@ async function eventDelivery() {
     userInfo[id] = keywordData;
   }
   pushMessage(userInfo, eventDic);
+  await updateEventData(oldEventData, latestEventData);
+}
+
+async function updateEventData(oldEventData: EventData[], latestEventData: {[key: number]: string}) {
+  const oldEventKeys = oldEventData.map(instance => instance.eventId);
+  const newEventKeys = Object.keys(latestEventData).map(key => parseInt(key));
+  for (const key of newEventKeys) {
+    if (!oldEventKeys.includes(key)) {
+      const name = decodeHTML(latestEventData[key]);
+      const isSaved = await eventData.findAll({where: {
+        eventId: key
+      }});
+    } 
+}
+  for (const instance of oldEventData) {
+    if (!newEventKeys.includes(instance.eventId)) {
+      await eventData.destroy({
+        where: {
+          eventId: instance.eventId
+        }
+      })
+    } 
+  }
 }
 
 async function getEventDataAll() {
