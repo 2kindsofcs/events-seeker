@@ -2,11 +2,13 @@ import config from 'config'; // cmd에서는 set NODE_ENV=something
 import sequelize from './models';
 import fetch from 'node-fetch';
 import Sequelize from 'sequelize';
+import {decodeHTML} from 'entities';
 import user from './models/user';
 import keywords from './models/keywords';
 import eventData from './models/eventData';
 import { Client, middleware as LineMiddleWare, FollowEvent, TextMessage } from '@line/bot-sdk';
 import express from 'express';
+import EventData from './models/eventData';
 
 const app = express();
 
@@ -45,12 +47,17 @@ async function eventDelivery() {
   const userIdList: string[] = users.map((instance) => {
     return instance.userId
   });
-  const rawData = await eventData.findAll();
-  let oldEventData;
-  if (rawData.length == 0) {
-    oldEventData = await getEventDataAll();
-  } else {
-    oldEventData = JSON.parse(rawData[0].eventList);
+  let oldEventData = await eventData.findAll();
+  if (oldEventData.length == 0) {
+    const rawData = await getEventDataAll();
+    const eventKeys = Object.keys(rawData).map(key => parseInt(key));
+    for (const key of eventKeys) {
+      await eventData.create({
+        eventId: key,
+        eventName: decodeHTML(rawData[key]),
+      });
+  }
+    oldEventData = await eventData.findAll();
   }
   const latestEventData = await getEventDataAll();
   const newEventData = await getNewEventData(oldEventData, latestEventData);
@@ -76,28 +83,34 @@ async function getEventDataAll() {
     name: string;
     eventId: string;
   }[] = response.rows;
-  return eventInfo;
+  let result: {[key: string]: string} = {};
+  for (const event of eventInfo) {
+    result[event.eventId] = decodeHTML(event.name);
+}
+  return result
 }
 
-async function getNewEventData(oldData: any, latestData: any) {
-  let result = [];
-  for (const event of latestData) {
-    if (!oldData.includes(event)) {
-      result.push(event);
-    }
+async function getNewEventData(oldData: EventData[], latestData: {[key: string]: string}) {
+  let eventData: {[key: string]: string} = {} 
+  const oldEventKeys = oldData.map(instance => instance.eventId)
+  const newEventKeys = Object.keys(latestData)
+    .filter(key => !oldEventKeys.includes(parseInt(key)));
+  for (const eventKey of newEventKeys) {
+    eventData[eventKey] = latestData[eventKey];
   }
-  return result 
+  return eventData
 }
 
-async function eventFilter(eventData: {name: string; eventId: string;}[], keywords: string[]) {
+async function eventFilter(eventData: {[key:string]: string}, keywords: string[]) {
   const eventDic: {[key: string]: string[]} = {}; // { "AI": ["주소1", "주소2"] } 형태 
-  for (const event of eventData) {
+  const eventKeys = Object.keys(eventData);
+  for (const key of eventKeys) {
     for (const keyword of keywords) {
-      if (event.name.includes(keyword)) {
+      if (eventData[key].includes(keyword)) {
         if (!eventDic.hasOwnProperty(keyword)) {
-          eventDic[keyword] = [`https://festa.io/events/${event.eventId}`];
+          eventDic[keyword] = [`https://festa.io/events/${key}`];
         } else {
-          eventDic[keyword].push(`https://festa.io/events/${event.eventId}`);
+          eventDic[keyword].push(`https://festa.io/events/${key}`);
         }
       }
     }
