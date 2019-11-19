@@ -7,7 +7,10 @@ export interface eventProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default class EventBox extends React.Component<eventProps> {
     public showEventLinks(eventLinkList: string[][]) {
-        if (eventLinkList.length > 1 ) {
+        if (!eventLinkList) {
+            return <div>앗, 키워드가 없어서 아무런 이벤트도 없네요!</div>
+        }
+        if (eventLinkList.length >= 1 && eventLinkList[0].length == 2) {
             return eventLinkList.map((event: string[], index: number) => {
                 return <div key={index} className="eventLink">{event[0]}<br/>{event[1]}</div>
             })

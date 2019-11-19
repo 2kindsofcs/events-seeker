@@ -154,16 +154,21 @@ async function getEventDataFesta(keywordList: string[]) {
   const eventDic: {[key: string]: string[][]}  = {}; 
   for (const event of eventInfo) {
     for (const keyword of keywordList) {
-      if (event.name.includes(keyword)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
-        if (!eventDic.hasOwnProperty(keyword)) {
-          eventDic[keyword] = [[event.name, `https://festa.io/events/${event.eventId}`]];
+      const keywordLower = keyword.toLowerCase()
+      if (event.name.toLowerCase().includes(keywordLower)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
+        if (!eventDic.hasOwnProperty(keywordLower)) {
+          eventDic[keywordLower] = [[decodeHTML(event.name), `https://festa.io/events/${event.eventId}`]];
         } else {
-          eventDic[keyword].push([event.name,`https://festa.io/events/${event.eventId}`]);
+          eventDic[keywordLower].push([decodeHTML(event.name),`https://festa.io/events/${event.eventId}`]);
         }
       }
     }
   }
+  if (Object.keys(eventDic).length >= 1) {
   return eventDic;
+  } else {
+    return {};
+  }
 }
 
 

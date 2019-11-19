@@ -26,17 +26,29 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
               .then(() => {
                 fetch(`/getEventData?keyword=${data.keyword}`)
                 .then((res) => res.json())
-                .then((eventInfo) => {
-                    const keyword = Object.keys(eventInfo)[0];
+                .then((eventInfo: {[key: string]: string[][]}) => {
                     const tempEventDic = this.state.eventDic;
-                    if (this.state.eventDic.hasOwnProperty(keyword)) {
-                        tempEventDic[keyword] = tempEventDic[keyword].concat(eventInfo[keyword]);
+                    if (Object.keys(eventInfo).length == 0) {
+                        tempEventDic[data.keyword] = [[]];
+                        this.setState({
+                            eventDic: tempEventDic,
+                        })
                     } else {
-                        tempEventDic[keyword] = eventInfo[keyword];
+                        const userKeyword = data.keyword
+                        const key = Object.keys(eventInfo)[0];
+                        if (tempEventDic.hasOwnProperty(userKeyword)) {
+                            if (tempEventDic[userKeyword][0].length == 1) {
+                                tempEventDic[userKeyword] = eventInfo[key]; 
+                            } else {
+                                tempEventDic[userKeyword].concat(eventInfo[key]);
                     }
+                        } else {
+                            tempEventDic[userKeyword] = eventInfo[key];
+                        }
                     this.setState({
                         eventDic: tempEventDic,
                     })
+                    }
                 });
               })
 
