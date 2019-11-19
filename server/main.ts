@@ -54,9 +54,28 @@ app.post('/addKeywords', async function(req, res) {
     }
   });
   if (req.session.userId && !isOverlapped) {
-    await keywords.create({userId: req.session.userId, keyword: req.body.keyword});
+
+app.get('/removeKeyword', async function(req, res) {
+  if (!req.session || !req.session.userId) {
+    res.send('');
+    return;
   }
-  res.send("end");
+  const keywordLower = req.body.keyword.toLowerCase();
+  const isPresent: number = await keywords.count({
+    where: {
+      userId: req.session.userId,
+      keyword: keywordLower,
+    }
+  });
+  if (req.session.userId && isPresent) {
+    await keywords.destroy({
+      where: {
+        userId: req.session.userId, 
+        keyword: keywordLower
+      }
+    });
+  }
+  res.send('removed');
 });
 
 app.get('/loginWithLine', function(req, res) {

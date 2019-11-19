@@ -58,6 +58,19 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         this.setState({keyword: e.target.value});
     }
 
+    public removeKeyword = async (keyword: string) => {
+        let newEventDic: {[key:string]: string[][]} = {};
+        const keys = Object.keys(this.state.eventDic);
+        for (const key of keys) {
+            if (key !== keyword) {
+                newEventDic[key] = this.state.eventDic[key]
+            }
+        }
+        this.setState({eventDic: newEventDic});
+        await fetch(`/removeKeyword?keyword=${keyword}`);
+        return;
+    }
+
     public showEventList = ():React.ReactNode => {
         return Object.keys(this.state.eventDic).map((keyword: string, index: number) => {
             return <EventBox key={index} keyword={keyword} eventLinkList={this.state.eventDic[keyword]} />
