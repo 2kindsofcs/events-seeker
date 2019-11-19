@@ -41,19 +41,23 @@ app.get('/isSignedInWithLine', function (req, res) {
   }
 })
 
-
 app.post('/addKeywords', async function(req, res) {
   if (!req.session || !req.session.userId) {
-    res.send('');
+    res.json('');
     return;
   }
+  const keywordLower = req.body.keyword.toLowerCase();
   const isOverlapped: number = await keywords.count({
     where: {
       userId: req.session.userId,
-      keyword: req.body.keyword,
+      keyword: keywordLower,
     }
   });
   if (req.session.userId && !isOverlapped) {
+    await keywords.create({userId: req.session.userId, keyword: keywordLower});
+  }
+  res.json("end");
+});
 
 app.get('/removeKeyword', async function(req, res) {
   if (!req.session || !req.session.userId) {
