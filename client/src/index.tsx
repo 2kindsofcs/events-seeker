@@ -64,6 +64,12 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         })
     }
 
+    public showKeywordList = () => {
+        return Object.keys(this.state.eventDic).map((keyword: string, index: number) => {
+            return <div className="keyword" key={index} onClick={() => this.removeKeyword(keyword)}>{keyword}</div>
+        })
+    }
+
     public signInCheck = () => {
         fetch('/isSignedInWithLine')
         .then((res) => res.json())
@@ -100,6 +106,8 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
             <p>봇을 친구로 추가하면 알람을 받을 수 있습니다.</p>
             <a href={this.addBotFriend()} target="_blank">친구 추가하기</a>
             <br/>
+            <h3 id="keywordList">키워드 목록</h3>
+            <div>{this.showKeywordList()}</div>
             <h3 id="eventList">이벤트 목록</h3>
             <div>{this.showEventList()}</div>
         </>;
