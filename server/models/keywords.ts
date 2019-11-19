@@ -16,5 +16,6 @@ Keywords.init({
 }, {
   freezeTableName: true, // Model tableName will be the same as the model name
   timestamps: false, // CreatedAt, UpdatedAt will not be generated
+  charset: 'utf8mb4',
   sequelize,
 });
