@@ -1,0 +1,59 @@
+h1 {
+    text-align: center;
+    background-color: #63b4cf;
+    color:#000000;
+    padding-top: 1.2em;
+    padding-right: 7em;
+    padding-bottom: 1.2em;
+    padding-left: 7em;
+}
+
+p {
+text-align: center;
+}
+
+#keywordButton {
+    padding: 0.5em 0.8em;
+    font-size: 0.9em;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #63b4cf;
+    border: none;
+    border-radius: 1em;
+    box-shadow: 0 0.7em #999;
+}
+
+.addBot {
+    border-color: gray;
+    border-style: dotted;
+    background-color: #d8edf3;
+    padding-top: 10px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    color: #2a7489;
+    text-decoration: None;
+}
+
+#keywordButton:hover  {
+    background-color: #30819c;
+    box-shadow: 0 0.5em #666;
+    transform: translateY(3px);
+}
+
+.eventBox {
+    padding-top: 0.5em;
+    padding-right: 1em;
+    padding-bottom: 0.5em;
+    padding-left: 1em;
+    border-color:#808080;
+    border-style: solid;
+    margin-bottom: 0.5em;
+}
+
+.eventName {
+    font-weight: bold;
+    font-size: large;
+}

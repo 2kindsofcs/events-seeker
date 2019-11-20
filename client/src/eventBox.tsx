@@ -24,8 +24,8 @@ export default class EventBox extends React.Component<eventProps> {
             <div className="eventBox">
                 <div className="eventName">
                     {this.props.keyword}
-                </div> 
-                    {this.showEventLinks(this.props.eventLinkList)}
+                </div>
+                {this.showEventLinks(this.props.eventLinkList)}
             </div>
         );
     }

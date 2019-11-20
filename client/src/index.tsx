@@ -1,3 +1,4 @@
+import './index.css';
 import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
@@ -41,13 +42,13 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
                                 tempEventDic[userKeyword] = eventInfo[key]; 
                             } else {
                                 tempEventDic[userKeyword].concat(eventInfo[key]);
-                    }
+                            }
                         } else {
                             tempEventDic[userKeyword] = eventInfo[key];
                         }
-                    this.setState({
-                        eventDic: tempEventDic,
-                    })
+                        this.setState({
+                            eventDic: tempEventDic,
+                        })
                     }
                 });
               })
