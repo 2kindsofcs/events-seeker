@@ -3,7 +3,7 @@
 import { Sequelize } from 'sequelize';
 import config from 'config';
 
-export const sequelize = new Sequelize({
+const sequelize = new Sequelize({
     dialectOptions: {
         charset: 'utf8mb4'
     },
