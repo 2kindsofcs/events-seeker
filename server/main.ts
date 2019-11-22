@@ -8,6 +8,7 @@ import keywords from './models/keywords';
 import express from 'express';
 import session from 'express-session';
 import jwt from 'jsonwebtoken';
+import {decodeHTML} from 'entities';
 import path from 'path';
 
 const Op = Sequelize.Op;
