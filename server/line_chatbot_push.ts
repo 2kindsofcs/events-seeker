@@ -2,10 +2,10 @@ import config from 'config'; // cmd에서는 set NODE_ENV=something
 import fetch from 'node-fetch';
 import {decodeHTML} from 'entities';
 import user from './models/user';
-import keywords from './models/keywords';
-import eventData from './models/eventData';
-import { Client, TextMessage } from '@line/bot-sdk';
+import Keywords from './models/keywords';
 import EventData from './models/eventData';
+import { Client, TextMessage } from '@line/bot-sdk';
+
 
 const client = new Client(config.get('botConfig'));
 
@@ -19,7 +19,7 @@ export {
 
 async function cronJob() {
   let standard: number;
-  const lastEventId: number = await eventData.max('eventId');
+  const lastEventId: number = await EventData.max('eventId');
   if (isNaN(lastEventId)) {
     standard = 0;
   } else {
@@ -49,7 +49,7 @@ async function getUserIdWithKeywords() {
     return instance.userId
   });
   for (const id of userIdList) {
-    const keywordData = (await keywords.findAll({
+    const keywordData = (await Keywords.findAll({
       attributes: ['keyword'],
       where: {userId: id}
     })).map(instance => instance.keyword);
@@ -67,7 +67,7 @@ async function updateEventData(newEventData: [number, string][]) {
     }
     dataToUpdate.push(element);
   }
-  const result = await eventData.bulkCreate(dataToUpdate);
+  const result = await EventData.bulkCreate(dataToUpdate);
   return result;
 }
 
