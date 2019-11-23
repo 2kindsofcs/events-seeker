@@ -9,15 +9,8 @@ import { Client, TextMessage } from '@line/bot-sdk';
 
 const client = new Client(config.get('botConfig'));
 
-export {
-  cronJob,
-  updateEventData,
-  getNewEventData,
-  eventFilter,
-  pushMessage,
-}
 
-async function cronJob() {
+export async function deliverEvent() {
   let standard: number;
   const lastEventId: number = await EventData.max('eventId');
   if (isNaN(lastEventId)) {
@@ -42,7 +35,7 @@ async function cronJob() {
 }
 
 
-async function getUserIdWithKeywords() {
+export async function getUserIdWithKeywords() {
   const result: [string, string[]][] = [];
   const users = await user.findAll();
   const userIdList: string[] = users.map((instance) => {
@@ -58,7 +51,7 @@ async function getUserIdWithKeywords() {
   return result;
 }
 
-async function updateEventData(newEventData: [number, string][]) {
+export async function updateEventData(newEventData: [number, string][]) {
   const dataToUpdate = [];
   for (const eventInfo of newEventData) {
     const element = {
@@ -100,7 +93,7 @@ async function getNewEventData(standard: number) {
 }
 
 
-function eventFilter(eventData: EventData[], keywords: string[]) {
+export function eventFilter(eventData: EventData[], keywords: string[]) {
   const eventDic: {[key: string]: string[]} = {}; // { "AI": ["주소1", "주소2"] } 형태 
   for (const keyword of keywords) {
     for (const instance of eventData) {
@@ -116,7 +109,7 @@ function eventFilter(eventData: EventData[], keywords: string[]) {
   return eventDic;
 }
 
-function pushMessage(userInfoList: [string, string[]][], eventDic: {[key: string]: string[]}) {
+export function pushMessage(userInfoList: [string, string[]][], eventDic: {[key: string]: string[]}) {
   for (const userInfo of userInfoList) {
     const userEventData: string[] = [];
     for (const keyword of userInfo[1]) {
