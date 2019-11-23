@@ -10,6 +10,7 @@ import session from 'express-session';
 import jwt from 'jsonwebtoken';
 import {decodeHTML} from 'entities';
 import path from 'path';
+import EventData from './models/eventData';
 
 const Op = Sequelize.Op;
 sequelize.sync();
@@ -169,21 +170,16 @@ app.get('/getEventData', function(req, res) {
 });
 
 async function getEventDataFesta(keywordList: string[]) {
-  const rawData = await fetch('https://festa.io/api/v1/events?page=1&pageSize=24&order=startDate&excludeExternalEvents=false');
-  const response = await rawData.json();
-  const eventInfo: {
-    name: string;
-    eventId: string;
-  }[] = response.rows;
+  const eventData = await EventData.findAll();
   const eventDic: {[key: string]: string[][]}  = {}; 
-  for (const event of eventInfo) {
+  for (const event of eventData) {
     for (const keyword of keywordList) {
       const keywordLower = keyword.toLowerCase()
-      if (event.name.toLowerCase().includes(keywordLower)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
+      if (event.eventName.toLowerCase().includes(keywordLower)) { // TODO: 주소만 주는게 아니라 키워드랑 이벤트 이름도 주자.
         if (!eventDic.hasOwnProperty(keywordLower)) {
-          eventDic[keywordLower] = [[decodeHTML(event.name), `https://festa.io/events/${event.eventId}`]];
+          eventDic[keywordLower] = [[decodeHTML(event.eventName), `https://festa.io/events/${event.eventId}`]];
         } else {
-          eventDic[keywordLower].push([decodeHTML(event.name),`https://festa.io/events/${event.eventId}`]);
+          eventDic[keywordLower].push([decodeHTML(event.eventName),`https://festa.io/events/${event.eventId}`]);
         }
       }
     }
