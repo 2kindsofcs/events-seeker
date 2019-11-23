@@ -45,6 +45,7 @@
     "eslint-config-google": "^0.14.0",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "*",
+    "sqlite3": "^4.1.0",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.5.2",
