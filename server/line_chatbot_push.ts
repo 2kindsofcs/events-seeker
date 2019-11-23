@@ -132,6 +132,9 @@ function pushMessage(userInfoList: [string, string[]][], eventDic: {[key: string
     for (const link of userEventData) {
       eventMessage = eventMessage + link;
     }
+    if (eventMessage.length < 1) {
+      return
+    }
     const message: TextMessage = {
       type: 'text',
       text: eventMessage,
