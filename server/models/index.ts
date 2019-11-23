@@ -1,12 +1,21 @@
 'use strict';
 
-import { Sequelize } from 'sequelize';
-import config from 'config';
+import { Sequelize, Options } from 'sequelize';
+import { initEventData } from "./eventData";
+import { initKeywords } from "./keywords";
+import { initUser } from "./user";
 
-const sequelize = new Sequelize({
-    dialectOptions: {
-        charset: 'utf8mb4'
-    },
-    ...config.get('db'),
-});
-export default sequelize;
+export function init(config: Options) {
+    const sequelize = new Sequelize({
+        dialectOptions: {
+            charset: 'utf8mb4'
+        },
+        ...config,
+    });
+
+    initEventData(sequelize);
+    initKeywords(sequelize);
+    initUser(sequelize);
+    
+    sequelize.sync();
+}

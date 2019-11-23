@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class EventData extends Model {
   public eventId!: number;
@@ -9,19 +9,19 @@ class EventData extends Model {
 
 export default EventData;
 
-import sequelize from './index';
-
-EventData.init({
-  eventId: {
-    type: DataTypes.INTEGER.UNSIGNED, 
-    primaryKey: true,
-  },
-  eventName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-}, {
-  sequelize,
-  charset: 'utf8mb4',
-  tableName: 'eventData',
-});
+export function initEventData(sequelize: Sequelize) {
+  EventData.init({
+    eventId: {
+      type: DataTypes.INTEGER.UNSIGNED, 
+      primaryKey: true,
+    },
+    eventName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    charset: 'utf8mb4',
+    tableName: 'eventData',
+  });
+}

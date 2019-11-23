@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
 class Keywords extends Model {
   public id!: number;
@@ -8,14 +8,14 @@ class Keywords extends Model {
 
 export default Keywords;
 
-import sequelize from './index';
-
-Keywords.init({
-  userId: DataTypes.STRING,
-  keyword: DataTypes.STRING,
-}, {
-  freezeTableName: true, // Model tableName will be the same as the model name
-  timestamps: false, // CreatedAt, UpdatedAt will not be generated
-  charset: 'utf8mb4',
-  sequelize,
-});
+export function initKeywords(sequelize: Sequelize) {
+  Keywords.init({
+    userId: DataTypes.STRING,
+    keyword: DataTypes.STRING,
+  }, {
+    freezeTableName: true, // Model tableName will be the same as the model name
+    timestamps: false, // CreatedAt, UpdatedAt will not be generated
+    charset: 'utf8mb4',
+    sequelize,
+  });
+}

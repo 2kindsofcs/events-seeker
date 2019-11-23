@@ -1,6 +1,6 @@
 import { Client, middleware as LineMiddleWare, FollowEvent, TextMessage } from '@line/bot-sdk';
 import express from 'express';
-import sequelize from './models';
+import { init as initDB } from './models';
 import config from 'config';
 import { eventFilter, pushMessage } from './line_chatbot_push';
 import keywords from './models/keywords';
@@ -8,7 +8,7 @@ import eventData from './models/eventData';
 
 const app = express();
 
-sequelize.sync();
+initDB(config.get('db'));
 const client = new Client(config.get('botConfig'));
 
 app.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
