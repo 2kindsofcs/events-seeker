@@ -12,7 +12,7 @@ export default class EventBox extends React.Component<eventProps> {
         }
         if (eventLinkList.length >= 1 && eventLinkList[0].length == 2) {
             return eventLinkList.map((event: string[], index: number) => {
-                return <div key={index} className="eventLink">{event[0]}<br/>{event[1]}</div>
+                return <div key={index}><a href={event[1]} target="_blank">{event[0]}</a><br/></div>
             })
         } else {
             return <div>앗, 해당 키워드가 들어간 이벤트가 없습니다!</div>
