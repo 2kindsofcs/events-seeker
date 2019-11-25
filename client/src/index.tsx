@@ -80,7 +80,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
 
     public showKeywordList = () => {
         return Object.keys(this.state.eventDic).map((keyword: string, index: number) => {
-            return <div className="keyword" key={index} onClick={() => this.removeKeyword(keyword)}>{keyword}</div>
+            return <div className="keyword" key={index} onClick={() => this.removeKeyword(keyword)}>{keyword} X</div>
         })
     }
 
