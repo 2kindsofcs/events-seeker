@@ -108,7 +108,16 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         }
     }
 
-    public addBotFriend = () => 'line://ti/p/@193qusdw';
+    public showAddBot = () => {
+        if (this.state.isSignedIn) {
+            return (<p>배달봇을 친구로 추가하면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 받을 수 있습니다.<br/>
+            <a href="line://ti/p/@193qusdw" target="_blank">친구 추가하기</a></p>)
+        } else {
+            return (<p>라인으로 로그인하시면 키워드가 저장됩니다.<br/>
+            또한, 배달봇을 친구로 추가하시면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 보내드립니다. </p>)
+        }
+        
+    }
 
     public render() {
         return <>
@@ -117,9 +126,8 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
             <button id="keywordButton" onClick={this.updateEventData}>추가하기</button>
-            <p>봇을 친구로 추가하면 알람을 받을 수 있습니다.</p>
-            <a href={this.addBotFriend()} target="_blank">친구 추가하기</a>
             <br/>
+            {this.showAddBot()}
             <h3 id="keywordList">키워드 목록</h3>
             <div>{this.showKeywordList()}</div>
             <h3 id="eventList">이벤트 목록</h3>
