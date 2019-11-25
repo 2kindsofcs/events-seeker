@@ -60,7 +60,7 @@ app.get('/removeKeyword', async function(req, res) {
     res.send('');
     return;
   }
-  const keywordLower = req.body.keyword.toLowerCase();
+  const keywordLower = req.query.keyword.toLowerCase();
   const isPresent: number = await keywords.count({
     where: {
       userId: req.session.userId,
