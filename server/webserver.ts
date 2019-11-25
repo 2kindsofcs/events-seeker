@@ -86,6 +86,13 @@ app.get('/loginWithLine', function(req, res) {
   res.redirect(`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=openid`);
 });
 
+app.get('/logoutLine', function(req, res) {
+  if (req.session && req.session.userId) {
+    req.session.userId = undefined;
+  }
+  res.send('logout');
+})
+
 
 app.get('/callback', function(req, res) {
   if (!req.session) {

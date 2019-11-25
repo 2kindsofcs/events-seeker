@@ -102,10 +102,22 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
 
     public greetingHandler = () => {
         if (this.state.isSignedIn) {
-            return <p>로그인 하셨습니다.</p>
+            return <div><p>로그인 하셨습니다.  <button onClick={this.logoutLine}>로그아웃 하기</button></p></div>
         } else {
             return <a href="/loginWithLine">라인으로 로그인하기</a>
         }
+    }
+
+    public logoutLine = () => {
+        fetch('/logoutLine')
+        .then(() => {
+            const initStatus = {
+                isSignedIn: false,
+                eventDic: {},
+                keyword: '',
+            }
+            this.setState(initStatus);
+        })
     }
 
     public showAddBot = () => {
