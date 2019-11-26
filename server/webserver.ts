@@ -8,6 +8,7 @@ import user from './models/user';
 import keywords from './models/keywords';
 import jwt from 'jsonwebtoken';
 import path from 'path';
+import cryptoRandomString  from 'crypto-random-string';
 
 const sessionStore = new session.MemoryStore();
 const sessionHandler = session({
@@ -81,7 +82,7 @@ app.get('/removeKeyword', async function(req, res) {
 app.get('/loginWithLine', function(req, res) {
   const clientId = config.get('channelId');
   const redirectUri = config.get('redirectUri');
-  const state = '12345abcde'; // TODO: 랜덤으로 만들어줘야 됨. 일단 테스트용 임시값 사용.
+  const state = cryptoRandomString({length: 10});
   req.session!.state = state;
   res.redirect(`https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}&scope=openid`);
 });

@@ -6,6 +6,7 @@
   "dependencies": {
     "@line/bot-sdk": "^6.8.2",
     "config": "^3.2.3",
+    "crypto-random-string": "^3.0.1",
     "ejs": "^2.7.1",
     "entities": "^2.0.0",
     "eslint": "^6.3.0",
@@ -53,7 +54,7 @@
   },
   "scripts": {
     "test": "node main.js",
-    "compile": "tsc -p server/tsconfig.json && node --inspect out/server/main.js",
+    "compile": "tsc -p server/tsconfig.json && node out/server/main.js",
     "start": "nodemon -e ts --exec \"npm run compile\"",
     "build:client": "webpack --config client/webpack.config.ts"
   },
