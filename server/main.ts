@@ -15,6 +15,6 @@ cron.schedule('*/30 9-22 * * *', () =>
 
 import app from './webserver';
 import router from './line_chatbot_add_friend';
-app.use('/chatbot', router);
+app.use('/webhook', router);
 app.listen(80);
 

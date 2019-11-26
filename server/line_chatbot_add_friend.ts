@@ -7,7 +7,7 @@ import eventData from './models/eventData';
 
 const router = express.Router();
 
-router.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
+router.post('/line', LineMiddleWare(config.get('botConfig')), (req, res) => {
   Promise
       .all(req.body.events.map(handleEvent))
       .then((result) => res.json(result));
