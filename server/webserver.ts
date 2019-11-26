@@ -94,6 +94,45 @@ app.get('/logoutLine', function(req, res) {
 })
 
 
+app.get('/inactivate', async function (req, res) {
+  if (!req.session || !req.session.access_token) {
+    res.status(400);
+    res.send('no session or access_token')
+    return;
+  }
+  let err = false;
+  const url = 'https://api.line.me/oauth2/v2.1/revoke';
+  const data = `client_id=${config.get('channelId')}&client_secret=${config.get('channelSecret')}&access_token=${req.session.access_token}`
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: data, 
+  }).catch(e => {
+    console.error(e)
+    err = true; 
+  })
+  if (err) {
+    res.send("failed delete access token").status(500)
+    return
+  }
+  const id = req.session.userId;
+  await user.destroy({
+    where: {
+      userId: id,
+    }
+  })
+  await keywords.destroy({
+    where: {
+      userId: id,
+    }
+  })
+  res.send("deleted").status(200);
+  return;
+})
+
+
 app.get('/callback', function(req, res) {
   if (!req.session) {
     res.status(403);
@@ -194,6 +233,4 @@ async function getEventDataFesta(keywordList: string[]) {
 
 app.use('/', express.static(path.join(__dirname, '..', 'client')));
 
-export default function start(port: number) {
-    app.listen(port, () => console.log(`listening on ${port}`));
-}
+export default app;

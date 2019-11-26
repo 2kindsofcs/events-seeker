@@ -13,5 +13,8 @@ cron.schedule('*/30 9-22 * * *', () =>
 );
 
 
-import start from './webserver';
-start(80);
+import app from './webserver';
+import router from './line_chatbot_add_friend';
+app.use('/chatbot', router);
+app.listen(80);
+

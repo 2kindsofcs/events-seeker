@@ -1,17 +1,13 @@
-import { Client, middleware as LineMiddleWare, FollowEvent, TextMessage } from '@line/bot-sdk';
+import { middleware as LineMiddleWare, FollowEvent } from '@line/bot-sdk';
 import express from 'express';
-import { init as initDB } from './models';
 import config from 'config';
 import { eventFilter, pushMessage } from './line_chatbot_push';
 import keywords from './models/keywords';
 import eventData from './models/eventData';
 
-const app = express();
+const router = express.Router();
 
-initDB(config.get('db'));
-const client = new Client(config.get('botConfig'));
-
-app.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
+router.post('/webhook', LineMiddleWare(config.get('botConfig')), (req, res) => {
   Promise
       .all(req.body.events.map(handleEvent))
       .then((result) => res.json(result));
@@ -36,3 +32,5 @@ async function handleEvent(event: FollowEvent) {
     }
   }
 }
+
+export default router;
