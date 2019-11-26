@@ -116,14 +116,14 @@ export function pushMessage(userInfoList: [string, string[]][], eventDic: {[key:
       if (eventDic[keyword]) {
         for (const event of eventDic[keyword]) {
           if (!userEventData.includes(event)) {
-            userEventData.push(event + "\n")
+            userEventData.push(event)
           }
         }
       } 
     }
     let eventMessage = ""
     for (const link of userEventData) {
-      eventMessage = eventMessage + link;
+      eventMessage = eventMessage + link + "\n";
     }
     if (eventMessage.length < 1) {
       return
