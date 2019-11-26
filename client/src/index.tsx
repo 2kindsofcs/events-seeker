@@ -3,13 +3,14 @@ import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
 
-class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[][]}, keyword: string }> {
+class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = {
             isSignedIn: false,
             eventDic: {},
             keyword: '',
+            inactivateModal: false,
         };
     }
 
@@ -100,9 +101,39 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         this.signInCheck();
       }
 
+    public showinactivateModal = () => {
+        const inactivateClicked = this.state.inactivateModal
+        if (inactivateClicked) {
+            return (<div id="myModal" className="modal">
+            <div className="modal-content">
+              <p>아래 탈퇴하기 버튼을 누르면 라인 정보가 삭제되며,</p>
+              <p>저장하신 키워드들도 전부 삭제됩니다.</p>
+              <p>(정상적으로 탈퇴되면 로그아웃되고 메인페이지로 돌아갑니다! 놀라지 마세요!</p>
+              <button className="modalButton" onClick={() => this.setState({inactivateModal: false})}>취소하기</button>
+              <button className="modalButton" onClick={this.inactivate}>탈퇴하기</button>
+            </div>
+          </div>)
+        } 
+    }
+
+    public inactivate = () => {
+        try {
+            fetch('/inactivate')
+            .then(() => {
+              this.logoutLine();  
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        
+    }
+
     public greetingHandler = () => {
         if (this.state.isSignedIn) {
-            return <div><p>로그인 하셨습니다.  <button onClick={this.logoutLine}>로그아웃 하기</button></p></div>
+            return (<div><p>로그인 하셨습니다.  <button onClick={this.logoutLine}>로그아웃 하기</button></p>
+                <button className="inactivateButton" onClick={() => this.setState({inactivateModal: true})}>서비스 탈퇴하기</button>
+                {this.showinactivateModal()}
+                </div>)
         } else {
             return <a href="/loginWithLine">라인으로 로그인하기</a>
         }
@@ -115,6 +146,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
                 isSignedIn: false,
                 eventDic: {},
                 keyword: '',
+                inactivateModal: false,
             }
             this.setState(initStatus);
         })
