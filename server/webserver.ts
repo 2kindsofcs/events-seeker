@@ -144,6 +144,13 @@ app.get('/callback', function(req, res) {
     return;
   }
 
+  if (req.query.error) {
+    if (req.query.error_description) {
+      console.log(req.query.error_description);
+    }
+    res.redirect('/')
+  }
+
   const session = req.session;
 
   if (session.state == req.query.state) {
