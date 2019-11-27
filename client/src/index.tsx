@@ -1,7 +1,9 @@
-import './index.css';
+// import './index.css';
 import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
+import NavBar from './navBar';
+import InactivateModal from './inactivateModal';
 
 class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean }> {
     constructor(props: any) {
@@ -126,15 +128,8 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
     public showinactivateModal = () => {
         const inactivateClicked = this.state.inactivateModal
         if (inactivateClicked) {
-            return (<div id="myModal" className="modal">
-            <div className="modal-content">
-              <p>아래 탈퇴하기 버튼을 누르면 라인 정보가 삭제되며,</p>
-              <p>저장하신 키워드들도 전부 삭제됩니다.</p>
-              <p>(정상적으로 탈퇴되면 로그아웃되고 메인페이지로 돌아갑니다! 놀라지 마세요!</p>
-              <button className="modalButton" onClick={() => this.setState({inactivateModal: false})}>취소하기</button>
-              <button className="modalButton" onClick={this.inactivate}>탈퇴하기</button>
-            </div>
-          </div>)
+            return <InactivateModal closeInactivateModal={() => this.setState({inactivateModal: false})}
+             inactivateLineAccount={this.inactivate}/>
         } 
     }
 
@@ -148,19 +143,6 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             console.error(e)
         }
         
-    }
-
-    public greetingHandler = () => {
-        if (this.state.isSignedIn) {
-            return (<div><p>로그인 하셨습니다.  <button onClick={this.logoutLine}>로그아웃 하기</button></p>
-                <button className="inactivateButton" onClick={() => this.setState({inactivateModal: true})}>서비스 탈퇴하기</button>
-                {this.showinactivateModal()}
-                </div>)
-        } else if (this.state.isSignedIn == false) {
-            return(<div id="loginButtonWrapper">
-                <a href="/loginWithLine">라인으로 로그인하기</a>
-                </div>)
-        }
     }
 
     public logoutLine = () => {
@@ -190,9 +172,12 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
 
     public render() {
         return <>
-            <div>{this.greetingHandler()}</div>
-            <h1>이벤트 배달부 📮</h1>
+            <div className="container">
+            <NavBar isSignedIn={this.state.isSignedIn} logoutLine={this.logoutLine} 
+            inactivateModal={() => this.setState({inactivateModal: true})}
+            showinactivateModal={this.showinactivateModal} />
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
+            
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
             <button id="keywordButton" onClick={this.updateEventData}>추가하기</button>
             {this.showKeywordWarning()}
@@ -202,6 +187,7 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             <div>{this.showKeywordList()}</div>
             <h3 id="eventList">이벤트 목록</h3>
             <div>{this.showEventList()}</div>
+            </div>
         </>;
     }
 }
