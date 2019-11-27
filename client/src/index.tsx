@@ -161,11 +161,11 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
 
     public showAddBot = () => {
         if (this.state.isSignedIn) {
-            return (<p>배달봇을 친구로 추가하면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 받을 수 있습니다.<br/>
-            <a href="line://ti/p/@193qusdw" target="_blank">친구 추가하기</a></p>)
+            return (<p>배달봇을 친구로 추가하면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 받을 수 있습니다. 
+            <a href="line://ti/p/@193qusdw" target="_blank" className="button is-primary">배달봇 친구 추가하기</a></p>)
         } else {
-            return (<p>라인으로 로그인하시면 키워드가 저장됩니다.<br/>
-            또한, 배달봇을 친구로 추가하시면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 보내드립니다. </p>)
+            return (<p>라인으로 로그인하시면 키워드가 저장됩니다. <u>(로그인하지 않으면 키워드는 저장되지 않습니다!)</u><br/>
+            또한, 배달봇을 친구로 추가하시면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 보내드립니다.<br/></p>)
         }
         
     }
@@ -183,11 +183,12 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             inactivateModal={() => this.setState({inactivateModal: true})} burgerClicked={this.state.burgerClicked}
             showinactivateModal={this.showinactivateModal} burgerHandler={this.toggleBurger} />
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
+            <br/>
             <KeywordInputBox keyword={this.state.keyword} keywordChangeHandler={this.changeHandler}
             updateEventData={this.updateEventData} showKeywordWarning={this.showKeywordWarning} />
             {this.showKeywordWarning()}
-            <br/>
             {this.showAddBot()}
+            <br/>
             <h2 id="keywordList">키워드 목록</h2>
             <div className="tags are-medium">{this.showKeywordList()}</div>
             <h2 id="eventList">이벤트 목록</h2>
