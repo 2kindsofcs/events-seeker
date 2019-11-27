@@ -4,6 +4,8 @@ import reactDom from 'react-dom';
 import EventBox from './eventBox';
 import NavBar from './navBar';
 import InactivateModal from './inactivateModal';
+import KeywordInputBox from './keywordInputBox';
+import KeywordWarningModal from './keywordWarningModal';
 
 class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean }> {
     constructor(props: any) {
@@ -13,7 +15,7 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             eventDic: {},
             keyword: '',
             inactivateModal: false,
-            keywordWarningModal: false,    
+            keywordWarningModal: false,
         };
     }
 
@@ -91,19 +93,16 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
 
     public showKeywordList = () => {
         return Object.keys(this.state.eventDic).map((keyword: string, index: number) => {
-            return <div className="keyword" key={index} onClick={() => this.removeKeyword(keyword)}>{keyword} X</div>
+            return <span className="tag" key={index} onClick={() => this.removeKeyword(keyword)}>{keyword} X</span>
         })
     }
 
     public showKeywordWarning = () => {
         const warned = this.state.keywordWarningModal;
         if (warned) {
-            return (<div id="myModal" className="modal">
-            <div className="modal-content">
-              <p>키워드는 1자 이상 15자 이하만 가능합니다. (영,한 모두)</p>
-              <button className="modalButton" onClick={() => this.setState({keywordWarningModal: false})}>확인</button>
-            </div>
-          </div>)
+            return (
+                <KeywordWarningModal closeKeywordWarningModal={() => this.setState({keywordWarningModal: false})} />
+            )
         }
     }
 
@@ -177,15 +176,14 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             inactivateModal={() => this.setState({inactivateModal: true})}
             showinactivateModal={this.showinactivateModal} />
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
-            
-            <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
-            <button id="keywordButton" onClick={this.updateEventData}>추가하기</button>
+            <KeywordInputBox keyword={this.state.keyword} keywordChangeHandler={this.changeHandler}
+            updateEventData={this.updateEventData} showKeywordWarning={this.showKeywordWarning} />
             {this.showKeywordWarning()}
             <br/>
             {this.showAddBot()}
-            <h3 id="keywordList">키워드 목록</h3>
-            <div>{this.showKeywordList()}</div>
-            <h3 id="eventList">이벤트 목록</h3>
+            <h2 id="keywordList">키워드 목록</h2>
+            <div className="tags are-medium">{this.showKeywordList()}</div>
+            <h2 id="eventList">이벤트 목록</h2>
             <div>{this.showEventList()}</div>
             </div>
         </>;
