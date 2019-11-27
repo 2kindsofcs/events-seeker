@@ -1,4 +1,4 @@
-// import './index.css';
+import './index.css';
 import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
@@ -7,7 +7,7 @@ import InactivateModal from './inactivateModal';
 import KeywordInputBox from './keywordInputBox';
 import KeywordWarningModal from './keywordWarningModal';
 
-class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean }> {
+class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean, burgerClicked: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -16,6 +16,7 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             keyword: '',
             inactivateModal: false,
             keywordWarningModal: false,
+            burgerClicked: false,    
         };
     }
 
@@ -169,12 +170,18 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
         
     }
 
+    public toggleBurger = () => {
+        this.setState({
+            burgerClicked: !this.state.burgerClicked
+        })
+    }
+
     public render() {
         return <>
             <div className="container">
             <NavBar isSignedIn={this.state.isSignedIn} logoutLine={this.logoutLine} 
-            inactivateModal={() => this.setState({inactivateModal: true})}
-            showinactivateModal={this.showinactivateModal} />
+            inactivateModal={() => this.setState({inactivateModal: true})} burgerClicked={this.state.burgerClicked}
+            showinactivateModal={this.showinactivateModal} burgerHandler={this.toggleBurger} />
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
             <KeywordInputBox keyword={this.state.keyword} keywordChangeHandler={this.changeHandler}
             updateEventData={this.updateEventData} showKeywordWarning={this.showKeywordWarning} />

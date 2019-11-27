@@ -2,6 +2,8 @@ import React from "react";
 
 interface navBarProps extends React.HTMLAttributes<HTMLDivElement> {
     isSignedIn: undefined | boolean
+    burgerClicked: boolean
+    burgerHandler: Function
     logoutLine: Function
     inactivateModal: Function
     showinactivateModal: Function
@@ -9,6 +11,7 @@ interface navBarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 
 export default class NavBar extends React.Component<navBarProps> {
+  
     public showNavbarWithButton(isSignedIn: undefined | boolean) {
         if (isSignedIn) {
             return (<div className="navbar-end">
@@ -38,6 +41,8 @@ export default class NavBar extends React.Component<navBarProps> {
     }
     
     public render() {
+        const burgerClassName = this.props.burgerClicked? "navbar-burger burger is-active" : "navbar-burger burger";
+        const navBarMenuClassName = this.props.burgerClicked? "navbar-menu is-active" : "navbar-menu";
         return (
             <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
@@ -45,7 +50,7 @@ export default class NavBar extends React.Component<navBarProps> {
                 이벤트 배달부 📮
               </a>
       
-              <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false"
+              <a role="button" onClick={() => this.props.burgerHandler()} className={burgerClassName} aria-label="menu" aria-expanded="false"
                 data-target="navbarBasicExample">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -53,7 +58,7 @@ export default class NavBar extends React.Component<navBarProps> {
               </a>
             </div>
       
-            <div id="navbarBasicExample" className="navbar-menu">
+            <div id="navbarBasicExample" className={navBarMenuClassName}>
               <div className="navbar-start">
                 <a className="navbar-item">
                   About
