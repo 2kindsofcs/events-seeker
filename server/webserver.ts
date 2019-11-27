@@ -31,9 +31,11 @@ app.use(function(req, res, next) { // express.josn()을 그냥 쓰면 line bot s
 app.use(express.urlencoded({extended: true}));
 
 app.get('/isSignedInWithLine', function (req, res) {
-  if (!req.session) {
+  if (!req.session || !req.session.userId) {
     res.json({answer: false});
-  } else if (req.session.userId) {
+    return;
+  } 
+  if (req.session.userId) {
     res.json({answer: true});
   }
 })

@@ -3,11 +3,11 @@ import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
 
-class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean }> {
+class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = {
-            isSignedIn: false,
+            isSignedIn: undefined,
             eventDic: {},
             keyword: '',
             inactivateModal: false,
@@ -109,11 +109,13 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         fetch('/isSignedInWithLine')
         .then((res) => res.json())
         .then(async (res) => {
+            this.setState({
+                isSignedIn: res.answer
+            });
             if (res.answer === true) {
-                this.setState({isSignedIn: res.answer});
                 const userEventDic = await fetch('/getEventDataAll').then((res) => res.json());
                 this.setState({eventDic: userEventDic});
-            }
+            } 
         })
     }
 
@@ -154,8 +156,10 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
                 <button className="inactivateButton" onClick={() => this.setState({inactivateModal: true})}>서비스 탈퇴하기</button>
                 {this.showinactivateModal()}
                 </div>)
-        } else {
-            return <a href="/loginWithLine">라인으로 로그인하기</a>
+        } else if (this.state.isSignedIn == false) {
+            return(<div id="loginButtonWrapper">
+                <a href="/loginWithLine">라인으로 로그인하기</a>
+                </div>)
         }
     }
 
