@@ -3,7 +3,7 @@ import React from 'react';
 import reactDom from 'react-dom';
 import EventBox from './eventBox';
 
-class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean }> {
+class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -11,6 +11,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
             eventDic: {},
             keyword: '',
             inactivateModal: false,
+            keywordWarningModal: false,    
         };
     }
 
@@ -18,6 +19,13 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         const data = {
             keyword: this.state.keyword,
         }
+        if (this.state.keyword.length > 15) {
+            this.setState({
+                keywordWarningModal: true,
+                keyword: ''
+            });
+            return
+        } 
         fetch('/addKeywords', {
                 method: 'POST',
                 body: JSON.stringify(data),
@@ -85,6 +93,18 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         })
     }
 
+    public showKeywordWarning = () => {
+        const warned = this.state.keywordWarningModal;
+        if (warned) {
+            return (<div id="myModal" className="modal">
+            <div className="modal-content">
+              <p>키워드는 15자 이하만 가능합니다. (영,한 모두)</p>
+              <button className="modalButton" onClick={() => this.setState({keywordWarningModal: false})}>확인</button>
+            </div>
+          </div>)
+        }
+    }
+
     public signInCheck = () => {
         fetch('/isSignedInWithLine')
         .then((res) => res.json())
@@ -147,6 +167,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
                 eventDic: {},
                 keyword: '',
                 inactivateModal: false,
+                keywordWarningModal: false,
             }
             this.setState(initStatus);
         })
@@ -170,6 +191,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
             <input type="text" id="keywords" value={this.state.keyword} onChange={this.changeHandler} />
             <button id="keywordButton" onClick={this.updateEventData}>추가하기</button>
+            {this.showKeywordWarning()}
             <br/>
             {this.showAddBot()}
             <h3 id="keywordList">키워드 목록</h3>
