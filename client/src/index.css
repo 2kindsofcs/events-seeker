@@ -1,68 +1,13 @@
-h1 {
-    text-align: center;
-    background-color: #63b4cf;
-    color:#000000;
-    padding-top: 1.2em;
-    padding-right: 7em;
-    padding-bottom: 1.2em;
-    padding-left: 7em;
-    word-break: keep-all;
+
+
+#keywordList {
+    font-weight: bold;
+    font-size: large;
 }
 
-p {
-text-align: center;
-}
-
-a:link {
-text-decoration: none;
-}
-
-a:visited {
-text-decoration: none;
-}
-
-a:hover {
-text-decoration: underline;
-color: #00008b
-}
-
-a:active {
-text-decoration: underline;
-}
-
-#loginButtonWrapper {
-    text-align: center;
-}
-
-#keywordButton {
-    padding: 0.5em 0.8em;
-    font-size: 0.9em;
-    text-align: center;
-    cursor: pointer;
-    outline: none;
-    color: #000000;
-    background-color: #63b4cf;
-    border: none;
-    border-radius: 1em;
-    box-shadow: 0 0.7em #999;
-}
-
-.addBot {
-    border-color: gray;
-    border-style: dotted;
-    background-color: #d8edf3;
-    padding-top: 10px;
-    padding-right: 30px;
-    padding-bottom: 10px;
-    padding-left: 30px;
-    color: #2a7489;
-    text-decoration: None;
-}
-
-#keywordButton:hover  {
-    background-color: #30819c;
-    box-shadow: 0 0.5em #666;
-    transform: translateY(3px);
+#eventList {
+    font-weight: bold;
+    font-size: large;
 }
 
 .eventBox {
@@ -70,53 +15,9 @@ text-decoration: underline;
     padding-right: 1em;
     padding-bottom: 0.5em;
     padding-left: 1em;
-    border-color:#808080;
-    border-style: solid;
     margin-bottom: 0.5em;
 }
 
 .eventName {
     font-weight: bold;
-    font-size: large;
-}
-
-.keyword {
-    padding: 0.4em;
-    border-color: black;
-    border-style: dotted;
-    width: fit-content;
-}
-
-.keyword:hover {
-    cursor: pointer;
-}
-
-.modal {
-    display: block;
-    position: fixed; 
-    z-index: 1; 
-    padding-top: 100px; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgba(73, 40, 40, 0.4);
-}
-  
-
-.modal-content {
-    background-color: #dcdcdc;
-    margin: auto;
-    padding: 3em;
-    border: 0.6em solid #808080;
-    width: 80%;
-}
-
-.modalButton {
-    text-align: center;
-}
-
-.inactivateButton {
-    float: right
 }
