@@ -44,8 +44,8 @@ app.post('/addKeywords', async function(req, res) {
     return;
   }
   const keywordLower = req.body.keyword.toLowerCase();
-  if (keywordLower.length > 15) {
-    res.send("too long keyword").status(400);
+  if (keywordLower.length > 15 || keywordLower.length == 0) {
+    res.send("too long keyword or none").status(400);
     return;
   }
   const isOverlapped: number = await keywords.count({

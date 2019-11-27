@@ -19,7 +19,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         const data = {
             keyword: this.state.keyword,
         }
-        if (this.state.keyword.length > 15) {
+        if (this.state.keyword.length > 15 || this.state.keyword.length == 0) {
             this.setState({
                 keywordWarningModal: true,
                 keyword: ''
@@ -98,7 +98,7 @@ class App extends React.Component<{}, { isSignedIn: boolean, eventDic: {[key: st
         if (warned) {
             return (<div id="myModal" className="modal">
             <div className="modal-content">
-              <p>키워드는 15자 이하만 가능합니다. (영,한 모두)</p>
+              <p>키워드는 1자 이상 15자 이하만 가능합니다. (영,한 모두)</p>
               <button className="modalButton" onClick={() => this.setState({keywordWarningModal: false})}>확인</button>
             </div>
           </div>)
