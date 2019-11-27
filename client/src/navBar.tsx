@@ -60,7 +60,7 @@ export default class NavBar extends React.Component<navBarProps> {
       
             <div id="navbarBasicExample" className={navBarMenuClassName}>
               <div className="navbar-start">
-                <a className="navbar-item">
+                <a className="navbar-item" href="https://github.com/2kindsofcs/events-seeker" target="_blank" >
                   About
                 </a>
       
