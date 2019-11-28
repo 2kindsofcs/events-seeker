@@ -31,7 +31,7 @@ export default class NavBar extends React.Component<navBarProps> {
             return (<div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons">
-                <a className="button is-success" href="/loginWithLine">
+                <a className="button lineLoginButton" href="/loginWithLine">
                   <strong>라인으로 로그인하기</strong>
                 </a>
               </div>

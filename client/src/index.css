@@ -2,6 +2,20 @@
     padding: 1em;
 }
 
+.addButton{
+    background-color: #1D72AA;
+    color: #ffffff;
+}
+
+.lineLoginButton {
+    background-color: #178033;
+    color: #ffffff;
+}
+
+.input {
+    border-color: #1D72AA;
+}
+
 #keywordList {
     font-weight: bold;
     font-size: large;
