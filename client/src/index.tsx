@@ -6,6 +6,8 @@ import NavBar from './navBar';
 import InactivateModal from './inactivateModal';
 import KeywordInputBox from './keywordInputBox';
 import KeywordWarningModal from './keywordWarningModal';
+import DataSaveWarningBox from './dataSaveWarningBox';
+import LineBotInfoBox from './lineBotInfoBox';
 
 class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDic: {[key: string]: string[][]}, keyword: string, inactivateModal: boolean, keywordWarningModal: boolean, burgerClicked: boolean }> {
     constructor(props: any) {
@@ -160,13 +162,11 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
         })
     }
 
-    public showAddBot = () => {
+    public showGuide = () => {
         if (this.state.isSignedIn) {
-            return (<p>배달봇을 친구로 추가하면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 받을 수 있습니다. 
-            <a href="line://ti/p/@193qusdw" target="_blank" className="button is-primary">배달봇 친구 추가하기</a></p>)
+            return <LineBotInfoBox />
         } else {
-            return (<p>라인으로 로그인하시면 키워드가 저장됩니다. <u>(로그인하지 않으면 키워드는 저장되지 않습니다!)</u><br/>
-            또한, 배달봇을 친구로 추가하시면 새로운 이벤트가 festa.io에 등록되었을 때 알람을 보내드립니다.<br/></p>)
+            return <DataSaveWarningBox />
         }
         
     }
@@ -188,7 +188,7 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             <KeywordInputBox keyword={this.state.keyword} keywordChangeHandler={this.changeHandler}
             updateEventData={this.updateEventData} showKeywordWarning={this.showKeywordWarning} />
             {this.showKeywordWarning()}
-            {this.showAddBot()}
+            {this.showGuide()}
             <br/>
             <h2 id="keywordList">키워드 목록</h2>
             <div className="tags are-medium">{this.showKeywordList()}</div>
