@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import path from 'path';
 import htmlWebpackPlugin from 'html-webpack-plugin';
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
 export default function(): webpack.Configuration {
     return {
@@ -22,7 +23,8 @@ export default function(): webpack.Configuration {
         },
         plugins: [new htmlWebpackPlugin({
             template: path.join(__dirname, 'src/index.html')
-        })],
+        }), 
+        new FaviconsWebpackPlugin(`${path.join(__dirname, 'src/mailbox-310x310.png')}`)],
         resolve: {
             extensions: [
                 '.ts',
