@@ -183,6 +183,7 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             <NavBar isSignedIn={this.state.isSignedIn} logoutLine={this.logoutLine} 
             inactivateModal={() => this.setState({inactivateModal: true})} burgerClicked={this.state.burgerClicked}
             showinactivateModal={this.showinactivateModal} burgerHandler={this.toggleBurger} />
+            <div className="container contents">
             <p>아래에 원하는 키워드를 입력하면, festa.io에서 해당 키워드가 들어간 이벤트를 찾아드립니다.</p>
             <br/>
             <KeywordInputBox keyword={this.state.keyword} keywordChangeHandler={this.changeHandler}
@@ -194,6 +195,7 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
             <div className="tags are-medium">{this.showKeywordList()}</div>
             <h2 id="eventList">이벤트 목록</h2>
             <div>{this.showEventList()}</div>
+            </div>
             </div>
         </>;
     }
