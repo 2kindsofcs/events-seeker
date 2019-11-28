@@ -45,7 +45,7 @@ app.post('/addKeywords', async function(req, res) {
     res.json('');
     return;
   }
-  const keywordLower = req.body.keyword.toLowerCase();
+  const keywordLower = req.body.keyword.toLowerCase().trim();
   if (keywordLower.length > 15 || keywordLower.length == 0) {
     res.send("too long keyword or none").status(400);
     return;

@@ -70,7 +70,8 @@ class App extends React.Component<{}, { isSignedIn: boolean | undefined, eventDi
       }
     
     public changeHandler = (e:any) => {
-        this.setState({keyword: e.target.value});
+        const eventKeyword = e.target.value.trim();
+        this.setState({keyword: eventKeyword});
     }
 
     public removeKeyword = async (keyword: string) => {
