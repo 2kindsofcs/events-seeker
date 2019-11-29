@@ -15,6 +15,10 @@
 - [react](https://reactjs.org/)
 - [sequelize](https://sequelize.org/)
 
+## 개발 인원 및 소요 기간
+- 1인 개발
+- 2019년 10월 ~ 2019년 11월
+
 ## 개발 관련 달성하고자 했던 목표들  
 - CRUD를 갖춘 웹앱 제작
 - 프론트단과 백엔드를 동시에 제작
