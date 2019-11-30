@@ -36,7 +36,7 @@ describe("eventFilter", () => {
         })
     });
 
-    it("should updated DB with new event data", async () => {
+    it("should update DB with new event data", async () => {
         const newEventData: [number, string][] = [
             [125, "새 이벤트"],
             [126, "새 이벤트"],
