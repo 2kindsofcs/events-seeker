@@ -16,7 +16,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^1.7.0",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "nodemon": "^1.19.4",
     "oauth": "^0.9.15",
     "react": "^16.11.0",
