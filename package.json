@@ -47,7 +47,7 @@
     "css-loader": "^3.2.0",
     "eslint-config-google": "^0.14.0",
     "favicons-webpack-plugin": "^1.0.2",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "mocha": "*",
     "sqlite3": "^4.1.0",
     "style-loader": "^1.0.0",
